@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2D2A26"/>
+      <stop offset="100%" stop-color="#1A1918"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#E07A5F"/>
+      <stop offset="100%" stop-color="#F4A261"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded squircle (iOS style) -->
+  <rect width="512" height="512" rx="116" fill="url(#bgGrad)"/>
+
+  <!-- Subtle inner border for depth -->
+  <rect x="4" y="4" width="504" height="504" rx="112" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
+
+  <!-- Chart illustration in warm organic tones -->
+  <g filter="url(#softShadow)" transform="translate(68, 80)">
+    <!-- Baseline -->
+    <line x1="20" y1="300" x2="356" y2="300" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-linecap="round"/>
+
+    <!-- Bar 1 (Sage/Matcha) -->
+    <rect x="36" y="160" width="48" height="140" rx="14" fill="#819885"/>
+
+    <!-- Bar 2 (Warm Ochre) -->
+    <rect x="116" y="90" width="48" height="210" rx="14" fill="#D4A373"/>
+
+    <!-- Bar 3 (Terracotta Hero Bar) -->
+    <rect x="196" y="30" width="48" height="270" rx="14" fill="url(#accentGrad)"/>
+    
+    <!-- Accent dot on top of hero bar -->
+    <circle cx="220" cy="10" r="8" fill="#F4A261"/>
+
+    <!-- Bar 4 (Slate Teal) -->
+    <rect x="276" y="120" width="48" height="180" rx="14" fill="#6B8E9B"/>
+  </g>
+</svg>
