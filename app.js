@@ -751,9 +751,51 @@ window.addEventListener('DOMContentLoaded', () => {
   initNavigation();
   renderApp();
 
-  // Xử lý nút cài đặt ứng dụng trên Android
+  // Xử lý nút cài đặt ứng dụng trên cả iOS và Android
   const btnInstall = document.getElementById('btnInstallApp');
+  const descInstall = document.getElementById('descInstallApp');
+  const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
   if (btnInstall) {
+    if (isStandalone) {
+      // Đã cài đặt và đang mở dưới dạng App
+      btnInstall.style.display = 'flex';
+      btnInstall.innerHTML = `
+        <span>✅ Ứng dụng đã cài đặt trên máy</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      `;
+      btnInstall.style.background = 'rgba(108, 138, 120, 0.15)';
+      btnInstall.style.color = '#6C8A78';
+      btnInstall.style.borderColor = '#6C8A78';
+      if (descInstall) {
+        descInstall.style.display = 'block';
+        descInstall.textContent = 'Bạn đang dùng ứng dụng ở chế độ toàn màn hình.';
+      }
+    } else if (isIOS) {
+      // Đang mở trên Safari của iPhone
+      btnInstall.style.display = 'flex';
+      btnInstall.innerHTML = `
+        <span>📲 Cài đặt App vào iPhone</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+      `;
+      if (descInstall) {
+        descInstall.style.display = 'block';
+        descInstall.textContent = 'Bấm vào đây để xem hướng dẫn thêm vào màn hình chính iPhone.';
+      }
+
+      btnInstall.addEventListener('click', () => {
+        alert('👉 CÁCH CÀI VÀO IPHONE:\n\n1. Nhìn xuống thanh đáy trình duyệt Safari, bấm nút Chia sẻ (biểu tượng ô vuông có mũi tên chỉ lên ⎋).\n2. Cuộn xuống và chọn "Thêm vào MH chính" (Add to Home Screen).\n3. Bấm "Thêm" ở góc trên bên phải là xong!');
+      });
+    }
+
+    // Nếu là Android và có prompt tự động
     btnInstall.addEventListener('click', async () => {
       if (deferredInstallPrompt) {
         deferredInstallPrompt.prompt();
@@ -763,8 +805,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         deferredInstallPrompt = null;
         document.getElementById('settingsModal').classList.remove('active');
-      } else {
-        alert('Để cài đặt trên Android: Bạn bấm vào dấu 3 chấm (⋮) ở góc trên bên phải trình duyệt Chrome và chọn "Cài đặt ứng dụng" (Install app).');
       }
     });
   }
