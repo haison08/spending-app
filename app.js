@@ -712,8 +712,35 @@ function showToast(msg) {
 }
 
 // ==========================================================================
-// KHỞI ĐỘNG ỨNG DỤNG & ĐĂNG KÝ SERVICE WORKER (OFFLINE PWA)
+// KHỞI ĐỘNG ỨNG DỤNG & ĐĂNG KÝ SERVICE WORKER (OFFLINE PWA CHO IPHONE & ANDROID)
 // ==========================================================================
+
+let deferredInstallPrompt = null;
+
+// Lắng nghe sự kiện cài đặt ứng dụng trên Android (Google Chrome, Edge, Brave...)
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  
+  const installBtn = document.getElementById('btnInstallApp');
+  const installDesc = document.getElementById('descInstallApp');
+  if (installBtn) installBtn.style.display = 'flex';
+  if (installDesc) installDesc.style.display = 'block';
+
+  // Hiển thị gợi ý cài đặt sau 2 giây nếu trên Android
+  setTimeout(() => {
+    showToast('💡 Bấm menu cài đặt để Cài App vào điện thoại!');
+  }, 2000);
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  const installBtn = document.getElementById('btnInstallApp');
+  const installDesc = document.getElementById('descInstallApp');
+  if (installBtn) installBtn.style.display = 'none';
+  if (installDesc) installDesc.style.display = 'none';
+  showToast('🎉 Đã cài đặt ứng dụng thành công!');
+});
 
 window.addEventListener('DOMContentLoaded', () => {
   loadTransactions();
@@ -724,7 +751,25 @@ window.addEventListener('DOMContentLoaded', () => {
   initNavigation();
   renderApp();
 
-  // Đăng ký Service Worker để lưu cache offline trên iPhone
+  // Xử lý nút cài đặt ứng dụng trên Android
+  const btnInstall = document.getElementById('btnInstallApp');
+  if (btnInstall) {
+    btnInstall.addEventListener('click', async () => {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        const { outcome } = await deferredInstallPrompt.userChoice;
+        if (outcome === 'accepted') {
+          showToast('Đang cài đặt vào điện thoại...');
+        }
+        deferredInstallPrompt = null;
+        document.getElementById('settingsModal').classList.remove('active');
+      } else {
+        alert('Để cài đặt trên Android: Bạn bấm vào dấu 3 chấm (⋮) ở góc trên bên phải trình duyệt Chrome và chọn "Cài đặt ứng dụng" (Install app).');
+      }
+    });
+  }
+
+  // Đăng ký Service Worker để lưu cache offline trên iPhone & Android
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
       .then(() => console.log('Service Worker đã kích hoạt thành công.'))

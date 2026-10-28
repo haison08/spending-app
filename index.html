@@ -227,6 +227,17 @@
       </div>
 
       <div class="settings-group">
+        <!-- Install App Button (đặc biệt hữu dụng cho Android) -->
+        <button type="button" class="settings-btn" id="btnInstallApp" style="display: none; background: var(--accent-light); border-color: var(--accent); color: var(--accent);">
+          <span>📲 Cài đặt App vào điện thoại</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </button>
+        <p class="settings-desc" id="descInstallApp" style="display: none;">Cài đặt ứng dụng vào màn hình chính và danh sách app Android để dùng offline.</p>
+
         <button type="button" class="settings-btn" id="btnExportData">
           <span>📦 Sao lưu dữ liệu (Xuất file JSON)</span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
